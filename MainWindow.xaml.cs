@@ -24,5 +24,37 @@ namespace ToDoApp
         {
             InitializeComponent();
         }
+
+
     }
+    #region SystemButton
+    public class MinButton : Button
+    {
+        protected override void OnClick()
+        {
+            Window.GetWindow(this).WindowState = WindowState.Minimized;
+        }
+    }
+    public class MaxButton : Button
+    {
+        protected override void OnClick()
+        {
+            Window.GetWindow(this).WindowState = WindowState.Maximized;
+        }
+    }
+    public class RestoreButton : Button
+    {
+        protected override void OnClick()
+        {
+            Window.GetWindow(this).WindowState = WindowState.Normal;
+        }
+    }
+    public class CloseButton : Button
+    {
+        protected override void OnClick()
+        {
+            Window.GetWindow(this).Close();
+        }
+    }
+    #endregion
 }

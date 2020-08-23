@@ -1,0 +1,79 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:ToDoApp">
+
+    <Style x:Key="SystemButton" TargetType="{x:Type Button}">
+        <Setter Property="Focusable" Value="False"/>
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="BorderBrush" Value="Transparent"/>
+        <Setter Property="Foreground" Value="White" />
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="Height" Value="32" />
+        <Setter Property="Width" Value="48" />
+        <Setter Property="HorizontalAlignment" Value="Right"/>
+        <Setter Property="VerticalAlignment" Value="Top"/>
+        <Setter Property="WindowChrome.IsHitTestVisibleInChrome" Value="True"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Border x:Name="border" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" SnapsToDevicePixels="true">
+                        <Path Data="{TemplateBinding Content}" Fill="White" Height="10" Width="10" Stretch="Uniform" HorizontalAlignment="Center" Margin="{TemplateBinding Padding}" VerticalAlignment="Center"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="true">
+                            <Setter Property="Background" Value="#03A9F4"/>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter Property="Background" Value="#4FC3F7"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+
+    <!--#region Window-->
+    <Geometry x:Key="MinimizeGeometry">M0 0L10 0L10 1L0 1z</Geometry>
+    <Geometry x:Key="RestoreGeometry">M2 0L10 0L10 8L8 8L8 10L0 10L0 2L2 2zM1 3L7 3L7 9L1 9zM3 1L9 1L9 7L8 7L8 2L3 2z</Geometry>
+    <Geometry x:Key="MaximizeGeometry">M0 0L10 0L10 10L0 10zM1 1L9 1L9 9L1 9z</Geometry>
+    <Geometry x:Key="CloseGeometry">M1 0L10 9L9 10L0 1zM9 0L10 1L1 10L0 9zM5 4L6 5L5 6L4 5z</Geometry>
+    <Style x:Key="WindowStyle" TargetType="{x:Type Window}">
+        <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.WindowTextBrushKey}}"/>
+        <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.WindowBrushKey}}"/>
+        <Setter Property="WindowChrome.WindowChrome">
+            <Setter.Value>
+                <!--<CaptionHeight:可拖拽大小 UseAeroCaptionButtons：屏蔽系统三个按钮的功能>-->
+                    <WindowChrome CaptionHeight="32" UseAeroCaptionButtons="False"/>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Window}">
+                    <Grid>
+                        <Grid x:Name="mainGrid" >
+                            <local:MinButton Panel.ZIndex="20" Content="{DynamicResource MinimizeGeometry}" Margin="0,0,96,0" Style="{StaticResource SystemButton}"/>
+                            <local:RestoreButton Panel.ZIndex="20"  Content="{DynamicResource RestoreGeometry}" x:Name="resButton" Margin="0,0,48,0" Style="{StaticResource SystemButton}"/>
+                            <local:MaxButton Content="{DynamicResource MaximizeGeometry}" x:Name="maxButton" Margin="0,0,48,0" Style="{StaticResource SystemButton}"/>
+                            <local:CloseButton  Panel.ZIndex="20"  Content="{DynamicResource CloseGeometry}" Style="{StaticResource SystemButton}"/>
+                            <AdornerDecorator>
+                                <ContentPresenter/>
+                            </AdornerDecorator>
+                        </Grid>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="WindowState" Value="Maximized">
+                            <Setter TargetName="mainGrid" Property="Margin" Value="7"/>
+                            <Setter TargetName="maxButton" Property="Visibility" Value="Collapsed"/>
+                        </Trigger>
+                        <Trigger Property="WindowState" Value="Normal">
+                            <Setter TargetName="resButton" Property="Visibility" Value="Collapsed"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <!--#endregion-->
+
+</ResourceDictionary>
