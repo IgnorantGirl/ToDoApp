@@ -32,9 +32,81 @@
         </Setter>
     </Style>
 
-
+    <Style x:Key="RadioButtonStyle" TargetType="{x:Type RadioButton}">
+        <Setter Property="FocusVisualStyle">
+            <Setter.Value>
+                <Style>
+                    <Setter Property="Control.Template">
+                        <Setter.Value>
+                            <ControlTemplate>
+                                <Rectangle Margin="2" SnapsToDevicePixels="True" Stroke="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" StrokeThickness="1" StrokeDashArray="1 2"/>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="Margin" Value="0 2 0 0"/>
+        <Setter Property="FontSize" Value="26"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+        <Setter Property="HorizontalContentAlignment" Value="Left"/>
+        <Setter Property="BorderBrush" Value="Transparent"/>
+        <Setter Property="Foreground" Value="Black"/>
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type RadioButton}">
+                    <Grid x:Name="templateRoot" Background="Transparent" SnapsToDevicePixels="True">
+                        <Border x:Name="border" BorderBrush="Red" BorderThickness="0"  SnapsToDevicePixels="True"/>
+                        <Border x:Name="bd2"/>
+                        <ContentPresenter x:Name="contentPresenter" ContentTemplate="{TemplateBinding ContentTemplate}"
+                                              Content="{TemplateBinding Content}" Grid.Column="1" 
+                                              ContentStringFormat="{TemplateBinding ContentStringFormat}" Focusable="False" 
+                                              HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" 
+                                              Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" 
+                                              VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="HasContent" Value="True">
+                            <Setter Property="FocusVisualStyle">
+                                <Setter.Value>
+                                    <Style>
+                                        <Setter Property="Control.Template">
+                                            <Setter.Value>
+                                                <ControlTemplate>
+                                                    <Rectangle Margin="14,0,0,0" SnapsToDevicePixels="True" Stroke="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" StrokeThickness="1" StrokeDashArray="1 2"/>
+                                                </ControlTemplate>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </Style>
+                                </Setter.Value>
+                            </Setter>
+                            <Setter Property="Padding" Value="4,-1,0,0"/>
+                        </Trigger>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Background" Value="#F7F7F7" TargetName="border"/>
+                        </Trigger>
+                        <!-- 选中RadioButton时的效果 -->
+                            <Trigger Property="IsChecked" Value="true">
+                            <Setter Property="FontWeight" Value="Bold"/>
+                            <Setter Property="Foreground"  Value="{Binding BackColor}"/>
+                            <Setter Property="BorderThickness" Value="4 0 0 0" TargetName="bd2"/>
+                            <Setter Property="BorderBrush" Value="{Binding BackColor}" TargetName="bd2"/>
+                            <Setter Property="Background" Value="{Binding BackColor}" TargetName="border"/>
+                            <Setter Property="Opacity" Value="0.05" TargetName="border"/>
+                        </Trigger>
+                        <Trigger Property="IsChecked" Value="{x:Null}"/>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="MinHeight" Value="44"/>
+        <Setter Property="HorizontalAlignment" Value="Stretch"/>
+    </Style>
+    
     <!--#region Window-->
-    <Geometry x:Key="MinimizeGeometry">M0 0L10 0L10 1L0 1z</Geometry>
+    <!-- 画图：最小化/最大化/还原/关闭-->
+        <Geometry x:Key="MinimizeGeometry">M0 0L10 0L10 1L0 1z</Geometry>
     <Geometry x:Key="RestoreGeometry">M2 0L10 0L10 8L8 8L8 10L0 10L0 2L2 2zM1 3L7 3L7 9L1 9zM3 1L9 1L9 7L8 7L8 2L3 2z</Geometry>
     <Geometry x:Key="MaximizeGeometry">M0 0L10 0L10 10L0 10zM1 1L9 1L9 9L1 9z</Geometry>
     <Geometry x:Key="CloseGeometry">M1 0L10 9L9 10L0 1zM9 0L10 1L1 10L0 9zM5 4L6 5L5 6L4 5z</Geometry>
@@ -54,7 +126,7 @@
                         <Grid x:Name="mainGrid" >
                             <local:MinButton Panel.ZIndex="20" Content="{DynamicResource MinimizeGeometry}" Margin="0,0,96,0" Style="{StaticResource SystemButton}"/>
                             <local:RestoreButton Panel.ZIndex="20"  Content="{DynamicResource RestoreGeometry}" x:Name="resButton" Margin="0,0,48,0" Style="{StaticResource SystemButton}"/>
-                            <local:MaxButton Content="{DynamicResource MaximizeGeometry}" x:Name="maxButton" Margin="0,0,48,0" Style="{StaticResource SystemButton}"/>
+                            <local:MaxButton Panel.ZIndex="20"  Content="{DynamicResource MaximizeGeometry}" x:Name="maxButton" Margin="0,0,48,0" Style="{StaticResource SystemButton}"/>
                             <local:CloseButton  Panel.ZIndex="20"  Content="{DynamicResource CloseGeometry}" Style="{StaticResource SystemButton}"/>
                             <AdornerDecorator>
                                 <ContentPresenter/>
