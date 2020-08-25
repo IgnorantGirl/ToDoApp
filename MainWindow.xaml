@@ -3,10 +3,14 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:cv="clr-namespace:ToDoApp.Converters"
         xmlns:local="clr-namespace:ToDoApp"
         Style="{DynamicResource WindowStyle}"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
+    <Window.Resources>
+        <cv:DisplayConverters x:Key="discv" />
+    </Window.Resources>
     <Grid Background="White">
         <Grid.ColumnDefinitions>
             <ColumnDefinition  Width="280"/>
@@ -22,8 +26,58 @@
                     </StackPanel>
                     <TextBlock Text="&#xe64b;" FontSize="22" Foreground="#8f8f8f" Margin="0 0 10 0" FontFamily="./Fonts/#iconfont" HorizontalAlignment="Right" VerticalAlignment="Center"/>
                 </UniformGrid>
-               
-                <RadioButton Command="{Binding RelativeSource={RelativeSource FindAncestor,AncestorType={x:Type local:MainWindow}},
+
+                <ListBox ItemsSource="{Binding MenuModels}" BorderThickness=" 0">
+                    <ListBox.ItemContainerStyle>
+                        <!--设置ListBoxItem的水平样式/边框厚度/背景-->
+                            <Style TargetType="ListBoxItem">
+                            <Setter Property="HorizontalAlignment" Value="Stretch" />
+                            <Setter Property="BorderThickness" Value="0" />
+                            <Setter Property="Background" Value="Transparent" />
+                            <!--设置ListBoxItem的模板-->
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="{x:Type ListBoxItem}" >
+                                        <Grid >
+                                            <Border x:Name="border" />
+                                            <ContentPresenter />
+                                        </Grid>
+                                        <ControlTemplate.Triggers>
+                                            <Trigger Property="IsSelected" Value="True">
+                                                <Setter Property="Background" TargetName="border" Value="Transparent" />
+                                            </Trigger>
+                                        </ControlTemplate.Triggers>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </ListBox.ItemContainerStyle>
+                    
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <RadioButton Command="{Binding RelativeSource={RelativeSource FindAncestor,AncestorType={x:Type local:MainWindow}},
+                                Path=DataContext.SelectedCommand,Mode=TwoWay}" Style="{DynamicResource RadioButtonStyle}" CommandParameter="{Binding}">
+                                <!--处理被选中的时候 按钮相互关联-->
+                                <RadioButton.IsChecked>
+                                    <Binding Path="IsSelected" RelativeSource="{RelativeSource AncestorType=ListBoxItem}"  Mode="TwoWay"/>
+                                </RadioButton.IsChecked>
+                                    <StackPanel  Orientation="Horizontal">
+                                    <TextBlock  Text="{Binding IconFont}" FontFamily="./Fonts/#iconfont" FontSize="22" 
+                                                   Margin="10 0 0 0" Foreground="{Binding BackColor}"/>
+                                    <TextBlock Margin="10 0 0 0" Text="{Binding Title}"  FontSize="14" VerticalAlignment="Center" 
+                                   Foreground="{Binding Foreground, RelativeSource={RelativeSource FindAncestor, AncestorLevel=1, 
+                                        AncestorType={x:Type RadioButton}}}" />
+                                    <!--绑定Count-->
+                                        <TextBlock Margin="10 0 0 0" Text="(" FontSize="15" VerticalAlignment="Center" />
+                                    <TextBlock Margin="5 0 5 0" Text="{Binding Count}" FontSize="15" VerticalAlignment="Center" />
+                                    <TextBlock  Text=")" FontSize="15" VerticalAlignment="Center" />
+                                </StackPanel>
+                            </RadioButton>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+                
+                <!--<RadioButton Command="{Binding RelativeSource={RelativeSource FindAncestor,AncestorType={x:Type local:MainWindow}},
                                 Path=DataContext.SelectedCommand,Mode=TwoWay}" Style="{DynamicResource RadioButtonStyle}"
                                          CommandParameter="{Binding}">
                     <RadioButton.IsChecked>
@@ -96,8 +150,72 @@
                                    Foreground="{Binding Foreground, RelativeSource={RelativeSource FindAncestor, AncestorLevel=1, 
                                         AncestorType={x:Type RadioButton}}}" />
                     </StackPanel>
-                </RadioButton>
+                </RadioButton>-->
             </StackPanel>
+        </Grid>
+
+        <Grid Grid.Column="1" Background="#2D8660" >
+            <Grid.RowDefinitions >
+                <RowDefinition Height="32" />
+                <RowDefinition Height="70" />
+                <RowDefinition />
+                <RowDefinition Height="90" />
+
+            </Grid.RowDefinitions>
+            <Grid Grid.Row="1">
+                <!--<Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="200"/>
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>-->
+                <StackPanel HorizontalAlignment="Left" Margin="30 0 0 0">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="{Binding MenuModel.IconFont}" FontFamily="./Fonts/#iconfont"   VerticalAlignment="Center" Foreground="White"  FontSize="40" />
+                        <TextBlock Text="{Binding MenuModel.Title}" Margin="5 0 0 0" VerticalAlignment="Center" Foreground="White" FontWeight="Bold" FontSize="30" />
+                    </StackPanel>
+                    <TextBlock Text="3333" FontSize="15" Foreground="White" VerticalAlignment="Center" />
+                </StackPanel>
+
+            </Grid>
+           
+            <!--第四列的UI-->
+            <Border Grid.Row="3" Background="Black" Opacity="0.1" CornerRadius="5" Margin="40 0 40 30" />
+            <Border Grid.Row="3" Margin="40 0 40 30" >
+                <Grid >
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="50" />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="+" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="30" Foreground="White"/>
+
+                    <TextBox Grid.Column="1">
+                        <TextBox.Resources>
+                            <VisualBrush x:Key ="hinttext" TileMode="None" AlignmentX="Left" Stretch="None">
+                                <VisualBrush.Visual>
+                                    <TextBlock FontStyle="Normal" Text="添加任务" />
+                                </VisualBrush.Visual>
+                            </VisualBrush>
+                        </TextBox.Resources>
+
+                        <TextBox.Style>
+                            <Style TargetType="TextBox" >
+                                <Setter Property="VerticalAlignment" Value="Center"/>
+                                <Setter Property="Foreground" Value="White"/>
+                                <Setter Property="FontSize" Value="14"/>
+                                <Setter Property="BorderThickness" Value="0"/>
+                                <Setter Property="Background" Value="Transparent"/>
+                                <Style.Triggers>
+                                    <Trigger Property="Text" Value="">
+                                        <Setter Property="Background" Value="{StaticResource hinttext}" />
+                                    </Trigger>
+                                    <Trigger Property="Text" Value="{x:Null}">
+                                        <Setter Property="Background" Value="{StaticResource hinttext}" />
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBox.Style>
+                    </TextBox>
+                </Grid>
+            </Border>
         </Grid>
     </Grid>
     

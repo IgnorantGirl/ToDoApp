@@ -13,5 +13,9 @@ namespace ToDoApp.Model
         public string Title { get; set; }
 
         public string BackColor { get; set; }
+
+        public int Count { get; set; }
+
+        public bool Display { get; set; } = true;
     }
 }
