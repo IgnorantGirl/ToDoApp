@@ -1,5 +1,7 @@
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
+using GalaSoft.MvvmLight.Messaging;
+using System;
 using System.Collections.ObjectModel;
 using ToDoApp.Model;
 
@@ -24,8 +26,12 @@ namespace ToDoApp.ViewModel
 
             //初始化命令
             SelectedCommand = new RelayCommand<MenuModel>(t =>Select(t));
+            SelectedTaskCommand = new RelayCommand<TaskInfo>(t => SelectTask(t));
+
 
         }
+
+
 
 
         //创建一个动态集合 MenuModel类型
@@ -39,21 +45,48 @@ namespace ToDoApp.ViewModel
 
         private MenuModel menuModel;
 
-
         public MenuModel MenuModel
         {
             get { return menuModel; }
             set { menuModel = value; RaisePropertyChanged(); }
         }
 
+        private TaskInfo info;
+
+        public TaskInfo Info
+        {
+            get { return info; }
+            set { info = value; RaisePropertyChanged(); }
+        }
         #region command
         public RelayCommand<MenuModel> SelectedCommand { get; set; }
+        public RelayCommand<TaskInfo> SelectedTaskCommand { get; set; }
 
-        private void Select(MenuModel model) {
+
+        #endregion
+
+        #region method
+
+        private void Select(MenuModel model)
+        {
 
             MenuModel = model;
         }
 
+        public void AddTaskInfo(string content)
+        {
+            MenuModel.TaskInfos.Add(new TaskInfo
+            {
+                Content = content
+            });
+        }
+
+        public void SelectTask(TaskInfo task) {
+            //通知前台页面--同样需要在页面注册一个方法
+            Info = task;
+            Messenger.Default.Send(task,"Expand");
+        }
         #endregion
+
     }
 }

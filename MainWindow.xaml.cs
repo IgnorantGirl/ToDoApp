@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GalaSoft.MvvmLight.Messaging;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,6 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using ToDoApp.Model;
 using ToDoApp.ViewModel;
 
 namespace ToDoApp
@@ -25,11 +27,34 @@ namespace ToDoApp
         {
             InitializeComponent();
             this.DataContext = new MainViewModel();
+            Messenger.Default.Register<TaskInfo>(this, "Expand", ExpandColumn);
+
         }
 
+        private void TextBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                string inputValue = inputText.Text;
+                if (inputValue == "") return;
 
+                var vm = this.DataContext as MainViewModel;
+                vm.AddTaskInfo(inputValue);
+                inputText.Text = string.Empty;
+            }
+        }
 
+        private void ExpandColumn(TaskInfo task) {
+            var cdf = grc.ColumnDefinitions;
+            if (cdf[1].Width == new GridLength(0))
+            {
+                cdf[1].Width = new GridLength(280);
+            }
+            else {
+                cdf[1].Width = new GridLength(0);
 
+            }
+        }
     }
     #region SystemButton
     public class MinButton : Button
