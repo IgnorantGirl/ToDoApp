@@ -7,7 +7,7 @@
         xmlns:local="clr-namespace:ToDoApp"
         Style="{DynamicResource WindowStyle}"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="600" Width="1000">
     <Window.Resources>
         <cv:DisplayConverters x:Key="discv" />
         <cv:DisplayMultiConverters x:Key="dismulti" />
@@ -155,15 +155,25 @@
             </StackPanel>
         </Grid>
 
-        <Grid Grid.Column="1" Background="{Binding MenuModel.BackColor}" >
+        <Grid Grid.Column="1" Background="{Binding MenuModel.BackColor}" Name="grc">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition Width="0"/>
+            </Grid.ColumnDefinitions>
             <Grid.RowDefinitions >
                 <RowDefinition Height="32" />
                 <RowDefinition Height="70" />
                 <RowDefinition />
                 <RowDefinition Height="90" />
-
             </Grid.RowDefinitions>
-            <Grid Grid.Row="1">
+
+            <StackPanel Panel.ZIndex="20" Orientation="Horizontal" HorizontalAlignment="Right" Grid.ColumnSpan="2" Grid.Row="0">
+                <local:MinButton   Panel.ZIndex="20" x:Name="btnmin"  Width="45" Height="30" Content="{DynamicResource MinimizeGeometry}" Foreground="White" BorderThickness="0" Background="Transparent"  />
+                <local:MaxButton  Panel.ZIndex="20" x:Name="btnmax"  Width="45" Height="30" Content="{DynamicResource MaximizeGeometry}"  Foreground="White" BorderThickness="0" Background="Transparent"   />
+                <local:CloseButton  Panel.ZIndex="20" x:Name="btnclose"  Width="45" Height="30" Content="×" Foreground="White" BorderThickness="0" Background="Transparent" />
+            </StackPanel>
+            <!--第二行的UI：标题+图标-->
+            <Grid Grid.Row="1" Grid.ColumnSpan="2">
                 <!--<Grid.ColumnDefinitions>
                     <ColumnDefinition Width="200"/>
                     <ColumnDefinition />
@@ -186,10 +196,10 @@
                 </StackPanel>
 
             </Grid>
-
+            <!--第三行的UI：内容-->
             <Grid Grid.Row="2">
                 <!--使用ItemsControl来完成动态集合的功能-->
-                <ItemsControl ItemsSource="{Binding MenuModels}">
+                <ItemsControl ItemsSource="{Binding MenuModel.TaskInfos}">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
                             <StackPanel />
@@ -221,7 +231,7 @@
                 </ItemsControl>
               
             </Grid>
-            <!--第四列的UI-->
+            <!--第四行的UI：添加任务-->
             <Border Grid.Row="3" Background="Black" Opacity="0.1" CornerRadius="5" Margin="40 0 40 30" />
             <Border Grid.Row="3" Margin="40 0 40 30" >
                 <Grid >
@@ -230,8 +240,8 @@
                         <ColumnDefinition />
                     </Grid.ColumnDefinitions>
                     <TextBlock Text="+" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="30" Foreground="White"/>
-
-                    <TextBox Grid.Column="1">
+                    <!--为下面按钮添加事件-->
+                    <TextBox Name="inputText" Grid.Column="1" KeyDown="TextBox_KeyDown" >
                         <TextBox.Resources>
                             <VisualBrush x:Key ="hinttext" TileMode="None" AlignmentX="Left" Stretch="None">
                                 <VisualBrush.Visual>
@@ -260,6 +270,11 @@
                     </TextBox>
                 </Grid>
             </Border>
+
+            <StackPanel Background="White" Grid.Column="1" Grid.RowSpan="4" >
+                
+            </StackPanel>
+        
         </Grid>
     </Grid>
 

@@ -55,5 +55,16 @@ namespace ToDoApp.ViewModel
         }
 
         #endregion
+
+        #region method
+
+        public void AddTaskInfo(string content) {
+            MenuModel.TaskInfos.Add(new TaskInfo
+            {
+                Content = content
+            });
+        }
+
+        #endregion
     }
 }
